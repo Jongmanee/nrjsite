@@ -52,5 +52,7 @@
         </ul>
         <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
     </div>
-    <?= $this->Html->link(__('New Site'), ['action' => 'add']) ?>
+    <div class="ajout">
+    <?= $this->Html->link(__('Ajouter un nouveau site'), ['action' => 'add']) ?>
+    </div>
 </div>

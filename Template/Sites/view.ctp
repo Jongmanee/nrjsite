@@ -19,16 +19,12 @@
     <h3><?= h($site->name) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th scope="row"><?= __('Name') ?></th>
+            <th scope="row"><?= __('Nom du site') ?></th>
             <td><?= h($site->name) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Type') ?></th>
+            <th scope="row"><?= __('Type du site') ?></th>
             <td><?= h($site->type) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($site->id) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Location X') ?></th>
@@ -44,20 +40,16 @@
         </tr>
     </table>
     <div class="related">
-        <h4><?= __('Related Records') ?></h4>
+        <h4><?= __('Liste des relévés du site') ?></h4>
         <?php if (!empty($site->records)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Site Id') ?></th>
                 <th scope="col"><?= __('Date') ?></th>
-                <th scope="col"><?= __('Value') ?></th>
+                <th scope="col"><?= __('Valeur') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($site->records as $records): ?>
             <tr>
-                <td><?= h($records->id) ?></td>
-                <td><?= h($records->site_id) ?></td>
                 <td><?= h($records->date) ?></td>
                 <td><?= h($records->value) ?></td>
                 <td class="actions">

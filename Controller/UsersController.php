@@ -99,17 +99,21 @@ class UsersController extends AppController {
 
         return $this->redirect(['action' => 'index']);
     }
-
+/**
     public function login() {
         if ($this->request->is('post')) {
+            
             $user = $this->Auth->identify();
+            $this->Flash->error($this->Auth->identify());
             if ($user) {
                 $this->Auth->setUser($user);
                 return $this->redirect($this->Auth->redirectUrl());
             }
-            // Utilisateur non identifié
+            // Utilisateur non identifiÃ©
+            else{
             $this->Flash->error('Votre nom d\'utilisateur ou votre mot de passe est incorrect');
         }
-    }
+        }
+    }*/
 
 }
