@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Site $site
@@ -6,13 +7,10 @@
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Site'), ['action' => 'edit', $site->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Site'), ['action' => 'delete', $site->id], ['confirm' => __('Are you sure you want to delete # {0}?', $site->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Sites'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Site'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Records'), ['controller' => 'Records', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Record'), ['controller' => 'Records', 'action' => 'add']) ?> </li>
+        <li class="heading"><?= __('Navigation') ?></li>
+        <li><?= $this->Html->link(__('Accueil'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Liste des sites'), ['controller' => 'Sites', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Liste des voies'), ['controller' => 'Paths', 'action' => 'index']) ?></li>
     </ul>
 </nav>
 <div class="sites view large-9 medium-8 columns content">
@@ -48,18 +46,110 @@
                 <th scope="col"><?= __('Valeur') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($site->records as $records): ?>
+            <?php foreach ($site->records as $record): ?>
             <tr>
-                <td><?= h($records->date) ?></td>
-                <td><?= h($records->value) ?></td>
+                <td><?= h($record->date) ?></td>
+                <td><?= h($record->value) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Records', 'action' => 'view', $records->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Records', 'action' => 'edit', $records->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Records', 'action' => 'delete', $records->id], ['confirm' => __('Are you sure you want to delete # {0}?', $records->id)]) ?>
+                    <?= $this->Form->postLink(__('Supprimer le relevé'), ['controller' => 'Records', 'action' => 'delete', $record->id], ['confirm' => __('Etes-vous sûr de vouloir supprimer le relevé du {0} ?', $record->date)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
         </table>
         <?php endif; ?>
+    </div>
+    <div>
+        <h4><?= __('Liste des voies associées') ?></h4>
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th scope="col"><?= __('Nom de la voie') ?></th>
+            </tr>
+            <?php foreach ($paths as $path): ?>
+            <tr>
+                <?php if ((h($site->id) == $path->starting_site_id) || (h($site->id) == $path -> ending_site_id)) { ?>
+                <td><?= $path->name; ?></td>
+            </tr>
+                <?php } endforeach; ?>
+        </table>
+    </div>
+    <div>
+     <?= $this->Form->create($records) ?>
+        <fieldset>
+            <legend><?= __('Ajouter un relevé') ?></legend>
+        <?php
+            echo $this->Form->control('site_id',['type'=>'hidden','default'=>h($site->id)]);
+            echo $this->Form->control('date',['label'=>'Date']);
+            echo $this->Form->control('value',['label'=>'Valeur du relevé']);
+            ?>
+        </fieldset>
+    <?= $this->Form->submit('Ajouter', array('name'=>'ajoutreleve'))?>
+    <?= $this->Form->end() ?>
+    </div>
+    <div>
+        <?= $this->Form->create($site) ?>
+        <fieldset>
+            <legend><?= __('Mettre à jour le Site') ?></legend>
+        <?php
+             echo $this->Form->input('type', array(
+                'type' => 'radio',
+                'options' => array(
+                    'consumer' => 'Consommateur',
+                    'producer' => 'Producteur'
+                )
+            ));
+            echo $this->Form->control('location_x');
+            echo $this->Form->control('location_y');
+            echo $this->Form->control('stock');
+        ?>
+        </fieldset>
+    <?= $this->Form->submit('Modifier', array('name'=>'modifsite'))?>
+    <?= $this->Form->end() ?>
+    </div>
+    <div>
+        <?= $this->Form->create($paths) ?>
+        <fieldset>
+            <legend><?= __('Ajouter une voie au site') ?></legend>
+            <?= $this->Form->control('name', ['value'=>'','label'=>'Nom de la voie']);?>
+            <?php
+                $tableau=array();
+                if ($site->type=='producer') {
+                    echo $this->Form->control('starting_site_id',['type'=>'hidden','default'=>$site->id]);
+                    foreach ($sites as $site0):
+                        if ($site0->type=='consumer') {
+                            $tableau[] = array($site0->id => $site0->name);
+                        }
+                    endforeach;
+                    echo $this->Form->select(
+                            'ending_site_id',
+                            $tableau,
+                            [
+                                'empty'=> 'Choisir un consommateur à relier'
+                            ]
+                            );
+                }
+                else {
+                    if ($site->type=='consumer') {
+                        foreach ($sites as $site0):
+                            if ($site0->type=='producer') {
+                                $tableau[] = array($site0->id => $site0->name);
+                            }
+                        endforeach;
+                        echo $this->Form->select(
+                            'starting_site_id',
+                            $tableau,
+                            [
+                                'empty'=> 'Choisir un producteur à relier'
+                            ]
+                            );
+                        echo $this->Form->control('ending_site_id',['type'=>'hidden','default'=>$site->id]);
+                    }
+                }
+                ?>
+            <?= $this->Form->control('max_capacity',['value'=>'','label'=>'Débit maximal']);?>
+            
+            
+    </fieldset>
+    <?= $this->Form->submit('Ajouter', array('name'=>'ajoutvoie'))?>
+    <?= $this->Form->end() ?>
     </div>
 </div>

@@ -8,8 +8,8 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Navigation') ?></li>
         <li><?= $this->Html->link(__('Accueil'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('Liste des sites'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List des voies'), ['controller' => 'Records', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Liste des sites'), ['controller' => 'Sites', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Liste des voies'), ['controller' => 'Paths', 'action' => 'index']) ?></li>
     </ul>
 </nav>
 <div class="sites index large-9 medium-8 columns content">
@@ -18,10 +18,8 @@
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('nom du site') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('type du site') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('location_x') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('location_y') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('stock') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -29,14 +27,11 @@
             <?php foreach ($sites as $site): ?>
             <tr>
                 <td><?= h($site->name) ?></td>
-                <td><?= h($site->type) ?></td>
                 <td><?= $this->Number->format($site->location_x) ?></td>
                 <td><?= $this->Number->format($site->location_y) ?></td>
-                <td><?= $this->Number->format($site->stock) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $site->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $site->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $site->id], ['confirm' => __('Are you sure you want to delete # {0}?', $site->id)]) ?>
+                    <?= $this->Html->link(__('Détail'), ['action' => 'view', $site->id]) ?>
+                    <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $site->id], ['confirm' => __('Etes-vous sûr de vouloir supprimer le site de {0} ?', $site->name)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -44,15 +39,34 @@
     </table>
     <div class="paginator">
         <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+            <?= $this->Paginator->first('<< ' . __('première page')) ?>
+            <?= $this->Paginator->prev('< ' . __('page précédente')) ?>
             <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
+            <?= $this->Paginator->next(__('page suivante') . ' >') ?>
+            <?= $this->Paginator->last(__('dernière page') . ' >>') ?>
         </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} sur {{pages}}, affiche {{current}} sites(s) sur un total de {{count}}')]) ?></p>
     </div>
     <div class="ajout">
-    <?= $this->Html->link(__('Ajouter un nouveau site'), ['action' => 'add']) ?>
+        <?= $this->Form->create($site) ?>
+    <fieldset>
+        <legend><?= __('Ajouter un site') ?></legend>
+        <?php
+            echo $this->Form->control('name', ['value'=>'','label'=>'Nom du site']);
+            echo $this->Form->input('type', array(
+                'type' => 'radio',
+                'options' => array(
+                    'consumer' => 'Consommateur',
+                    'producer' => 'Producteur'
+                )
+            ));
+            echo $this->Form->control('location_x',['value'=>'','label'=>'Location X']);
+            echo $this->Form->control('location_y',['value'=>'','label'=>'Location Y']);
+            echo $this->Form->control('stock',['value'=>'']);
+            ?>
+    </fieldset>
+    <?= $this->Form->submit('Ajouter', array('name'=>'ajoutsite'))?>
+    <?= $this->Form->end() ?>
     </div>
-</div>
+    
+</div>  

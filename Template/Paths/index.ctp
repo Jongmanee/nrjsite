@@ -6,48 +6,49 @@
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Path'), ['action' => 'add']) ?></li>
+        <li class="heading"><?= __('Navigation') ?></li>
+        <li><?= $this->Html->link(__('Accueil'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Liste des sites'), ['controller' => 'Sites', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Liste des voies'), ['controller' => 'Paths', 'action' => 'index']) ?></li>
     </ul>
 </nav>
 <div class="paths index large-9 medium-8 columns content">
-    <h3><?= __('Paths') ?></h3>
+    <h3><?= __('Liste des voies') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('starting_site_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('ending_site_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('max_capacity') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Nom de la voie') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Site producteur') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Site consommateur') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Débit maximal') ?></th>
             </tr>
         </thead>
-        <tbody>
+            
             <?php foreach ($paths as $path): ?>
-            <tr>
-                <td><?= $this->Number->format($path->id) ?></td>
+        <tr>
                 <td><?= h($path->name) ?></td>
-                <td><?= $this->Number->format($path->starting_site_id) ?></td>
-                <td><?= $this->Number->format($path->ending_site_id) ?></td>
+                <?php foreach ($sites as $site): ?>
+                    <?php if ($path->starting_site_id == $site->id) { ?>
+                        <td><?= $this->Html->link(__(h($site->name)), ['controller' => 'Sites','action' => 'view', $site->id]) ?></td> 
+                    <?php }endforeach;?>
+               <?php foreach ($sites as $site): 
+                    if ($path->ending_site_id == $site->id) { ?>
+                        <td><?= $this->Html->link(__(h($site->name)), ['controller' => 'Sites','action' => 'view', $site->id]) ?></td> 
+                    <?php }endforeach;?>
                 <td><?= $this->Number->format($path->max_capacity) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $path->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $path->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $path->id], ['confirm' => __('Are you sure you want to delete # {0}?', $path->id)]) ?>
-                </td>
-            </tr>
+        </tr>
             <?php endforeach; ?>
-        </tbody>
+        
     </table>
     <div class="paginator">
         <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+            <?= $this->Paginator->first('<< ' . __('première page')) ?>
+            <?= $this->Paginator->prev('< ' . __('page précédente')) ?>
             <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
+            <?= $this->Paginator->next(__('page suivante') . ' >') ?>
+            <?= $this->Paginator->last(__('dernière page') . ' >>') ?>
         </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} sur {{pages}}, affiche {{current}} voie(s) sur un total de {{count}}')]) ?></p>
     </div>
+    
 </div>
