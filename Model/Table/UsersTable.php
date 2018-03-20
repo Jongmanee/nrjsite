@@ -5,6 +5,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Event\Event;
+use ArrayObject;
 
 /**
  * Users Model
@@ -75,4 +77,14 @@ class UsersTable extends Table
 
         return $rules;
     }
+    // Mettez des use en haut de votre fichier.
+
+
+// Dans une classe table ou behavior
+public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+{
+    if (isset($data['passwd'])) {
+        $data['passwd'] = md5($data['passwd']);
+    }
+}
 }

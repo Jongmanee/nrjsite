@@ -22,8 +22,9 @@ class UsersController extends AppController {
     public function add() {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
-            
+            $user=$this->Users->newEntity();
             $user = $this->Users->patchEntity($user, $this->request->getData());
+            
             if ($this->Users->save($user)) {
                 $this->Flash->success(__("Enregistrement réussie, vous pouvez vous connecter"));
 
