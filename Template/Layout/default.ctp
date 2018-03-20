@@ -28,7 +28,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('cake.css') ?>
-
+    <?= $this->Html->script('fonctions.js')?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
@@ -52,8 +52,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?= $this->fetch('content') ?>
     </div>
     <footer>
-    <p>Membres (Groupe Energie Section Francaise) : Raphael Megevand - Denis Jongmanee - Fabien Chanioux - Thomas Louis - Maxime Lecointre </p>
-    <p> Option B, D et E </p>
+    Membres (Groupe Energie Section Francaise) : Raphael Megevand - Denis Jongmanee - Fabien Chanioux - Thomas Louis - Maxime Lecointre
+     --- Option B et E 
     </footer>
 </body>
 </html>

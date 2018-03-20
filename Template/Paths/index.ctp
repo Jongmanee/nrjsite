@@ -7,7 +7,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Navigation') ?></li>
-        <li><?= $this->Html->link(__('Accueil'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Accueil'), ['controller' => 'Pages', 'action' => 'accueil']) ?></li>
         <li><?= $this->Html->link(__('Liste des sites'), ['controller' => 'Sites', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des voies'), ['controller' => 'Paths', 'action' => 'index']) ?></li>
         <li><?= $this->Form->postLink(__('Se déconnecter'), ['controller' => 'Users', 'action' => 'deco', ]) ?></li>

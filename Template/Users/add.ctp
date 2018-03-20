@@ -6,8 +6,9 @@
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-
-
+        <li class="heading"><?= __('Navigation') ?></li>
+        <li><?= $this->Html->link(__('Se connecter'), ['action' => 'login']) ?></li>
+        <li><?= $this->Html->link(__("S'enregistrer"), ['action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="users form large-9 medium-8 columns content">
@@ -19,6 +20,6 @@
             echo $this->Form->control('passwd',['label'=>'Mot de passe']);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Confirmer')) ?>
+    <?= $this->Form->submit('Ajouter')?>
     <?= $this->Form->end() ?>
 </div>

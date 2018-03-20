@@ -66,4 +66,15 @@ class PagesController extends AppController
             throw new NotFoundException();
         }
     }
+    
+    public function accueil() {
+        session_start();
+        if (empty($_SESSION['connect'])) {
+            $_SESSION['connect'] = 'non';
+        }
+        if (($_SESSION['connect'] == 'non')) {
+            $this->Flash->error(__('Vous devez vous connecter pour accéder au site'));
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        }
+    }
 }

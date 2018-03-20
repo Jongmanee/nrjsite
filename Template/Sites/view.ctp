@@ -8,7 +8,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Navigation') ?></li>
-        <li><?= $this->Html->link(__('Accueil'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Accueil'), ['controller' => 'Pages', 'action' => 'accueil']) ?></li>
         <li><?= $this->Html->link(__('Liste des sites'), ['controller' => 'Sites', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des voies'), ['controller' => 'Paths', 'action' => 'index']) ?></li>
         <li><?= $this->Form->postLink(__('Se déconnecter'), ['controller' => 'Users', 'action' => 'deco', ]) ?></li>
@@ -162,7 +162,7 @@
         </table>
         <?php endif; ?>
     </div>
-    <div>
+    <div class="related">>
         <h4><?= __('Liste des voies associées') ?></h4>
         <table cellpadding="0" cellspacing="0">
             <tr>
@@ -178,7 +178,7 @@
     </div>
     <div>
      <?= $this->Form->create($records) ?>
-        <fieldset>
+        <fieldset>  
             <legend><?= __('Ajouter un relevé') ?></legend>
         <?php
             echo $this->Form->control('site_id',['type'=>'hidden','default'=>h($site->id)]);
@@ -192,19 +192,19 @@
     <div>
         <?= $this->Form->create($site) ?>
         <fieldset>
-            <legend><?= __('Mettre à jour le Site') ?></legend>
-        <?php
-             echo $this->Form->input('type', array(
+            <legend><?= __('Mettre à jour le Site') ?><a href='#' onclick="hideForm()"> Montrer/Cacher</a></legend>
+            <ul id='masque'>
+             <li><?= $this->Form->input('type', array(
                 'type' => 'radio',
                 'options' => array(
                     'consumer' => 'Consommateur',
                     'producer' => 'Producteur'
                 )
-            ));
-            echo $this->Form->control('location_x');
-            echo $this->Form->control('location_y');
-            echo $this->Form->control('stock');
-        ?>
+                 ));?></li>
+             <li><?= $this->Form->control('location_x');?></li>
+             <li><?=$this->Form->control('location_y');?></li>
+            <li><?= $this->Form->control('stock');?></li>
+        
         </fieldset>
     <?= $this->Form->submit('Modifier', array('name'=>'modifsite'))?>
     <?= $this->Form->end() ?>

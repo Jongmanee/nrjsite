@@ -129,12 +129,13 @@ class SitesController extends AppController {
         $this->request->allowMethod(['post', 'delete']);
         $site = $this->Sites->get($id);
         if ($this->Sites->delete($site)) {
-            $this->Flash->success(__('Le site a été supprimer.'));
+            $this->Flash->success(__('Le site a été supprimé.'));
         } else {
             $this->Flash->error(__("Le site n'a pas été supprimer, réessayer."));
         }
 
         return $this->redirect(['action' => 'index']);
     }
+    
 
 }

@@ -7,7 +7,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Navigation') ?></li>
-        <li><?= $this->Html->link(__('Accueil'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Accueil'), ['controller' => 'Pages', 'action' => 'accueil']) ?></li>
         <li><?= $this->Html->link(__('Liste des sites'), ['controller' => 'Sites', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des voies'), ['controller' => 'Paths', 'action' => 'index']) ?></li>
         <li><?= $this->Form->postLink(__('Se déconnecter'), ['controller' => 'Users', 'action' => 'deco', ]) ?></li>
@@ -33,6 +33,7 @@
                 <td class="actions">
                     <?= $this->Html->link(__('Détail'), ['action' => 'view', $site->id]) ?>
                     <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $site->id], ['confirm' => __('Etes-vous sûr de vouloir supprimer le site de {0} ?', $site->name)]) ?>
+                    <?= $this->Html->link(__('Position'), ['action' => '', $site->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
