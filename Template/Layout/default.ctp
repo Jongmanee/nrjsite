@@ -53,7 +53,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div>
     <footer>
     <p>Membres (Groupe Energie Section Francaise) : Raphael Megevand - Denis Jongmanee - Fabien Chanioux - Thomas Louis - Maxime Lecointre </p>
-    <p> Option B et E </p>
+    <p> Option B, D et E </p>
     </footer>
 </body>
 </html>

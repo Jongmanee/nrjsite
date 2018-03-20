@@ -47,13 +47,14 @@ class UsersController extends AppController {
     public function add() {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
+            
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__("Enregistrement réussie, vous pouvez vous connecter"));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'login']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__("L'enregistrement a échoué, réessayez"));
         }
         $this->set(compact('user'));
     }
@@ -99,21 +100,39 @@ class UsersController extends AppController {
 
         return $this->redirect(['action' => 'index']);
     }
-/**
+
     public function login() {
+        session_start();
+        $users = $this->paginate($this->Users);
         if ($this->request->is('post')) {
             
-            $user = $this->Auth->identify();
-            $this->Flash->error($this->Auth->identify());
-            if ($user) {
-                $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
+            if (isset($this->request->data['connect'])) {
+                
+                $userdemande= $this->request->getData('login');
+                $passwddemande=$this->request->getData('passwd');
+                foreach ($users as $user):
+                    if (($userdemande==$user->login) && ($passwddemande==$user->passwd)) {
+                        $_SESSION['connect']='oui';
+                    }
+                endforeach;
+                if ($_SESSION['connect']=='oui') {
+                    return $this->redirect(['controller'=>'Sites','action' => 'index']);
+                }
+                else
+                {
+                     return $this->Flash->error(__('Identifiants erronés'));
+                }
             }
-            // Utilisateur non identifié
-            else{
-            $this->Flash->error('Votre nom d\'utilisateur ou votre mot de passe est incorrect');
         }
-        }
-    }*/
+        
+    }
+    
+    public function deco() {
+        session_start();
+        $_SESSION['connect']='non';
+        $this->Flash->success(__('Vous avez été déconnecté !'));
+        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+    }
 
+    
 }

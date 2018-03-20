@@ -20,14 +20,27 @@ class PathsController extends AppController
      */
     public function index()
     {
+        session_start();
+        if (empty($_SESSION['connect'])) {
+            $_SESSION['connect'] = 'non';
+        }
+        if (($_SESSION['connect']=='non')) {
+                        $this->Flash->error(__('Vous devez vous connecter pour accéder au site'));
+                        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        }
         $this->paginate = [
             'contain' => ['Sites', 'Sites']
         ];
         $paths = $this->paginate($this->Paths);
+        
         $this->loadModel('Sites');
-
         $sites = $this->Sites->find();
         $this->set('sites',$sites);
+        
+        $this->loadModel('Records');
+        $records = $this->Records->find();
+        $this->set('records',$records);
+        
         $this->set(compact('paths'));
     }
 

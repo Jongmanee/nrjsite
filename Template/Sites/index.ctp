@@ -10,6 +10,7 @@
         <li><?= $this->Html->link(__('Accueil'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des sites'), ['controller' => 'Sites', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des voies'), ['controller' => 'Paths', 'action' => 'index']) ?></li>
+        <li><?= $this->Form->postLink(__('Se déconnecter'), ['controller' => 'Users', 'action' => 'deco', ]) ?></li>
     </ul>
 </nav>
 <div class="sites index large-9 medium-8 columns content">

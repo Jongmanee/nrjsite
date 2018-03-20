@@ -19,6 +19,17 @@ class SitesController extends AppController {
      * @return \Cake\Http\Response|void
      */
     public function index() {
+        session_start();
+        if (empty($_SESSION['connect'])) {
+            $_SESSION['connect'] = 'non';
+        }
+        if (($_SESSION['connect'] == 'non')) {
+            $this->Flash->error(__('Vous devez vous connecter pour accéder au site'));
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        }
+
+
+
         $sites = $this->paginate($this->Sites);
 
         $this->set(compact('sites'));
@@ -43,11 +54,21 @@ class SitesController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
+        session_start();
+        if (empty($_SESSION['connect'])) {
+            $_SESSION['connect'] = 'non';
+        }
+        if (($_SESSION['connect'] == 'non')) {
+            $this->Flash->error(__('Vous devez vous connecter pour accéder au site'));
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        }
         $site = $this->Sites->get($id, [
             'contain' => ['Records']
         ]);
         $this->set('site', $site);
-
+        
+        
+        
         $sites = $this->paginate($this->Sites);
         $this->set(compact('sites'));
 
@@ -59,7 +80,7 @@ class SitesController extends AppController {
         $paths = $this->Paths->find();
         $this->set('paths', $paths);
 
-            //fonction ajouter releve
+        //fonction ajouter releve
         if (isset($this->request->data['ajoutreleve'])) {
             $record = $this->Records->newEntity();
             $record = $this->Records->patchEntity($record, $this->request->getData());
@@ -88,13 +109,11 @@ class SitesController extends AppController {
                     $nvoie = $this->Paths->patchEntity($nvoie, $this->request->getData());
                     if ($this->Paths->save($nvoie)) {
                         $this->Flash->success(__('La voie a été ajoutée.'));
-                        return $this->redirect(['action' => 'index']);
+                        return $this->redirect(['controller' => 'Paths', 'action' => 'index']);
                     }
                     $this->Flash->error(__("La voie n'a pas été ajoutée, réessayez."));       //fin ajouter voie
                 }
             }
-
-            
         }
         $this->set(compact('site'));
     }

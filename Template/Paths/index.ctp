@@ -10,6 +10,7 @@
         <li><?= $this->Html->link(__('Accueil'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des sites'), ['controller' => 'Sites', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des voies'), ['controller' => 'Paths', 'action' => 'index']) ?></li>
+        <li><?= $this->Form->postLink(__('Se déconnecter'), ['controller' => 'Users', 'action' => 'deco', ]) ?></li>
     </ul>
 </nav>
 <div class="paths index large-9 medium-8 columns content">
@@ -21,6 +22,8 @@
                 <th scope="col"><?= $this->Paginator->sort('Site producteur') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Site consommateur') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Débit maximal') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Dernier relevé producteur') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Dernier relevé consommateur') ?></th>
             </tr>
         </thead>
             
@@ -36,6 +39,37 @@
                         <td><?= $this->Html->link(__(h($site->name)), ['controller' => 'Sites','action' => 'view', $site->id]) ?></td> 
                     <?php }endforeach;?>
                 <td><?= $this->Number->format($path->max_capacity) ?></td>
+                <?php
+                    $date='1900-01-01 20:20:20';
+                    foreach ($sites as $site):
+                        if ($site->id==$path->starting_site_id) {
+                            foreach ($records as $record):
+                                if ($record->site_id==$site->id) {
+                                    if ($date<$record->date)
+                                    {
+                                        $date=$record->date;
+                                    }
+                                }
+                            endforeach;
+                        }
+                    endforeach;
+                    ?> <td><?=$date;?></td>
+                <?php
+                    $date='1900-01-01 20:20:20';
+                    foreach ($sites as $site):
+                        if ($site->id==$path->ending_site_id) {
+                            foreach ($records as $record):
+                                if ($record->site_id==$site->id) {
+                                    if ($date<$record->date)
+                                    {
+                                        $date=$record->date;
+                                    }
+                                }
+                            endforeach;
+                        }
+                    endforeach;
+                    ?> <td><?=$date;?></td>
+                
         </tr>
             <?php endforeach; ?>
         

@@ -6,19 +6,19 @@
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
+
+
     </ul>
 </nav>
 <div class="users form large-9 medium-8 columns content">
     <?= $this->Form->create($user) ?>
     <fieldset>
-        <legend><?= __('Add User') ?></legend>
+        <legend><?= __("S'enregister") ?></legend>
         <?php
-            echo $this->Form->control('login');
-            echo $this->Form->control('passwd');
+            echo $this->Form->control('login',['label'=>"Nom d'utilisateur"]);
+            echo $this->Form->control('passwd',['label'=>'Mot de passe']);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Confirmer')) ?>
     <?= $this->Form->end() ?>
 </div>

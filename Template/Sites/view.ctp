@@ -11,6 +11,7 @@
         <li><?= $this->Html->link(__('Accueil'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des sites'), ['controller' => 'Sites', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des voies'), ['controller' => 'Paths', 'action' => 'index']) ?></li>
+        <li><?= $this->Form->postLink(__('Se déconnecter'), ['controller' => 'Users', 'action' => 'deco', ]) ?></li>
     </ul>
 </nav>
 <div class="sites view large-9 medium-8 columns content">
@@ -22,7 +23,17 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Type du site') ?></th>
-            <td><?= h($site->type) ?></td>
+            <?php if ($site->type=='producer') {?>
+            <td><?= 'Producteur';?></td>
+            <?php
+            }
+                else {
+                    if ($site->type=='consumer') {?>
+            <td><?= 'Consommateur';?></td>
+                        <?php
+                    }
+                }
+            ?>
         </tr>
         <tr>
             <th scope="row"><?= __('Location X') ?></th>
@@ -35,6 +46,99 @@
         <tr>
             <th scope="row"><?= __('Stock') ?></th>
             <td><?= $this->Number->format($site->stock) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Nombre de relevés') ?></th>
+            <?php
+                $nbreleve=0;
+                foreach ($records as $record):
+                    if ($record->site_id==$site->id) {
+                        $nbreleve=$nbreleve+1;
+                    }
+                endforeach;
+            ?>
+            <td><?=$nbreleve;?></td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <?php if($site->type=='consumer') {?>
+                    <?= __('Consommation totale') ?>
+                    <?php } else {
+                        if ($site->type=='producer') {?>
+                            <?= __('Production totale') ?>
+                        <?php }
+                    }?>
+            </th>
+            <?php
+                $total=0;
+                foreach ($records as $record):
+                    if ($record->site_id==$site->id) {
+                        $total=$total+$record->value;
+                    }
+                endforeach;
+            ?>
+            <td><?=$total;?></td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <?php if($site->type=='consumer') {?>
+                    <?= __('Consommation moyenne') ?>
+                    <?php } else {
+                        if ($site->type=='producer') {?>
+                            <?= __('Production moyenne') ?>
+                        <?php }
+                    }?>
+            </th>
+            <?php
+               $bdd = new PDO('mysql:host=localhost;dbname=ece_nrj;charset=utf8', 'root', ''); 
+               $reponse = $bdd->query('SELECT AVG(value) AS relmoy FROM Records WHERE site_id="'.$site->id.'"');
+               while ($donnees = $reponse->fetch()) {?>
+            <td><?=$donnees['relmoy'];?></td>
+                <?php   }
+            ?>
+        </tr>
+        <tr>
+            <th scope="row">
+                <?php if($site->type=='consumer') {?>
+                    <?= __('Consommation minimale') ?>
+                    <?php } else {
+                        if ($site->type=='producer') {?>
+                            <?= __('Production minimale') ?>
+                        <?php }
+                    }?>
+            </th>
+            <?php
+               $reponse = $bdd->query('SELECT MIN(value) AS relmin FROM Records WHERE site_id="'.$site->id.'"');
+               while ($donnees = $reponse->fetch()) {?>
+            <td><?=$donnees['relmin'];?></td>
+                <?php   }
+            ?>
+        </tr>
+        <tr>
+            <th scope="row">
+                <?php if($site->type=='consumer') {?>
+                    <?= __('Consommation maximale') ?>
+                    <?php } else {
+                        if ($site->type=='producer') {?>
+                            <?= __('Production maximale') ?>
+                        <?php }
+                    }?>
+            </th>
+            <?php
+               $reponse = $bdd->query('SELECT MAX(value) AS relmax FROM Records WHERE site_id="'.$site->id.'"');
+               while ($donnees = $reponse->fetch()) {?>
+            <td><?=$donnees['relmax'];?></td>
+                <?php   }
+            ?>
+        </tr>
+        <tr>
+            <th scope="row">Capacité totale d'approvisionnement</th>
+            <?php
+               $reponse = $bdd->query('SELECT SUM(max_capacity) AS debsum FROM Paths WHERE (starting_site_id="'.$site->id.'" OR ending_site_id="'.$site->id.'")');
+               while ($donnees = $reponse->fetch()) {?>
+            <td><?=$donnees['debsum'];?></td>
+                <?php   }
+            ?>
         </tr>
     </table>
     <div class="related">
@@ -146,9 +250,9 @@
                 }
                 ?>
             <?= $this->Form->control('max_capacity',['value'=>'','label'=>'Débit maximal']);?>
-            
-            
-    </fieldset>
+
+
+        </fieldset>
     <?= $this->Form->submit('Ajouter', array('name'=>'ajoutvoie'))?>
     <?= $this->Form->end() ?>
     </div>
