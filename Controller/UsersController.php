@@ -107,15 +107,16 @@ class UsersController extends AppController {
         if ($this->request->is('post')) {
             
             if (isset($this->request->data['connect'])) {
-                
                 $userdemande= $this->request->getData('login');
                 $passwddemande=$this->request->getData('passwd');
+                $passwddemande=md5($passwddemande);
                 foreach ($users as $user):
                     if (($userdemande==$user->login) && ($passwddemande==$user->passwd)) {
                         $_SESSION['connect']='oui';
                     }
                 endforeach;
                 if ($_SESSION['connect']=='oui') {
+                    $this->Flash->success(__('Connexion réussie, bienvenue !'));
                     return $this->redirect(['controller'=>'Sites','action' => 'index']);
                 }
                 else
